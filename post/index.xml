@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on </title>
+    <link>https://xuwangwei93.github.io/post/</link>
+    <description>Recent content in Posts on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 16 Sep 2020 21:42:28 +0800</lastBuildDate><atom:link href="https://xuwangwei93.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis持久化机制</title>
+      <link>https://xuwangwei93.github.io/post/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Wed, 16 Sep 2020 21:42:28 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/post/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/</guid>
+      <description>Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。
+AOF AOF记录的是操作命令，也就是增删改命令，例如set key1 value1在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。
+当Redis实例重启后，将AOF日志 1就可以恢复数据。
+AOF的优缺点 因为AOF是以追加写文件的形式记录一条更新命令，所以速度快。缺点是：
+ 文件系统有文件大小的限制，不可能一直追加写下去。 重放过程需要按顺序执行所有命令，文件越大越耗时。 当AOF文件越来越大时，追加写的速度也会越来越慢。  因此Redis提供了AOF重写的功能，用来减小AOF的文件大小。
+AOF重写 AOF重写会将某一状态下的所有数据，以命令的形式记录到文件中。对于某一个已经有过100次更新操作的键值对而言，经过AOF重写之后就从一百条命令变成了一条命令，因此AOF重写后可以使得AOF文件减小。当执行bgrewriteaof命令时， Redis进程会fork出一个子进程用于AOF的重写。这是为了不阻塞父进程继续对外提供服务。在Redis进程fork子进程的过程中，还是会阻塞的，因为需要将页表拷贝至子进程，Redis实例越大，页表就越大，拷贝的时间越长。拷贝完成后，子进程开始重写AOF文件，在重写的这段时间里如果有更新操作，比如SET key1 value2，父进程会申请新的内存页，将数据拷贝至新的内存页后，执行SET key1 value2命令修改新内存页，最后更新页表。
+RDB RDB是Redis实例某一状态下的所有数据，将RDB读入内存，数据就完全恢复了。RDB相当于在某一时刻对Redis实例拍了一张照片，因此也被称为RDB快照。
+RDB的优缺点 相对于AOF，用RDB恢复数据更快。生成RDB文件比写AOF文件慢，AOF只需要追加写，但是RDB需要对Redis实例的所有数据持久化，尽管Redis提供了异步生成RDB文件的方法。执行bgsave命令，主进程fork子进程，由子进程生成RDB文件。主进程fork子进程，拷贝页表期间，主进程是无法对外服务的。在子进程生成RDB文件期间，主进程采用写时复制。这部分和AOF重写是一样的。在子进程生成RDB文件期间，如果业务上读写比中写多读少，那么会占用相当一部分内存。比如数据总共有4G，写占比80%，那么需要额外占用4*0.8=3.2G内存。
+AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。
+  按顺序执行AOF中的所有命令 &amp;#x21a9;&amp;#xfe0e;
+   </description>
+    </item>
+    
+  </channel>
+</rss>
