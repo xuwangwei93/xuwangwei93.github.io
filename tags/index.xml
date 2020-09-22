@@ -5,13 +5,49 @@
     <link>https://xuwangwei93.github.io/tags/</link>
     <description>Recent content in Tags on </description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 16 Sep 2020 21:42:28 +0800</lastBuildDate><atom:link href="https://xuwangwei93.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 22 Sep 2020 22:20:18 +0800</lastBuildDate><atom:link href="https://xuwangwei93.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Open Source</title>
-      <link>https://xuwangwei93.github.io/tags/open-source/</link>
+      <title>Bitmap</title>
+      <link>https://xuwangwei93.github.io/tags/bitmap/</link>
+      <pubDate>Tue, 22 Sep 2020 22:20:18 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/tags/bitmap/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>java</title>
+      <link>https://xuwangwei93.github.io/tags/java/</link>
+      <pubDate>Tue, 22 Sep 2020 22:20:18 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Redis</title>
+      <link>https://xuwangwei93.github.io/tags/redis/</link>
       <pubDate>Wed, 16 Sep 2020 21:42:28 +0800</pubDate>
       
-      <guid>https://xuwangwei93.github.io/tags/open-source/</guid>
+      <guid>https://xuwangwei93.github.io/tags/redis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>持久化</title>
+      <link>https://xuwangwei93.github.io/tags/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+      <pubDate>Wed, 16 Sep 2020 21:42:28 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/tags/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>高可靠性</title>
+      <link>https://xuwangwei93.github.io/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/</link>
+      <pubDate>Wed, 16 Sep 2020 21:42:28 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7/</guid>
       <description></description>
     </item>
     

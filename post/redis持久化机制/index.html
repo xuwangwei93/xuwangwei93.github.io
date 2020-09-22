@@ -6,34 +6,30 @@
 	<meta itemprop="name" content="Redis持久化机制">
 <meta itemprop="description" content="Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。
 AOF AOF记录的是操作命令，也就是增删改命令，例如set key1 value1在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。
-当Redis实例重启后，将AOF日志 1就可以恢复数据。
+当Redis实例重启后，将AOF日志重放(按顺序执行AOF中的所有命令)就可以恢复数据。
 AOF的优缺点 因为AOF是以追加写文件的形式记录一条更新命令，所以速度快。缺点是：
  文件系统有文件大小的限制，不可能一直追加写下去。 重放过程需要按顺序执行所有命令，文件越大越耗时。 当AOF文件越来越大时，追加写的速度也会越来越慢。  因此Redis提供了AOF重写的功能，用来减小AOF的文件大小。
 AOF重写 AOF重写会将某一状态下的所有数据，以命令的形式记录到文件中。对于某一个已经有过100次更新操作的键值对而言，经过AOF重写之后就从一百条命令变成了一条命令，因此AOF重写后可以使得AOF文件减小。当执行bgrewriteaof命令时， Redis进程会fork出一个子进程用于AOF的重写。这是为了不阻塞父进程继续对外提供服务。在Redis进程fork子进程的过程中，还是会阻塞的，因为需要将页表拷贝至子进程，Redis实例越大，页表就越大，拷贝的时间越长。拷贝完成后，子进程开始重写AOF文件，在重写的这段时间里如果有更新操作，比如SET key1 value2，父进程会申请新的内存页，将数据拷贝至新的内存页后，执行SET key1 value2命令修改新内存页，最后更新页表。
 RDB RDB是Redis实例某一状态下的所有数据，将RDB读入内存，数据就完全恢复了。RDB相当于在某一时刻对Redis实例拍了一张照片，因此也被称为RDB快照。
 RDB的优缺点 相对于AOF，用RDB恢复数据更快。生成RDB文件比写AOF文件慢，AOF只需要追加写，但是RDB需要对Redis实例的所有数据持久化，尽管Redis提供了异步生成RDB文件的方法。执行bgsave命令，主进程fork子进程，由子进程生成RDB文件。主进程fork子进程，拷贝页表期间，主进程是无法对外服务的。在子进程生成RDB文件期间，主进程采用写时复制。这部分和AOF重写是一样的。在子进程生成RDB文件期间，如果业务上读写比中写多读少，那么会占用相当一部分内存。比如数据总共有4G，写占比80%，那么需要额外占用4*0.8=3.2G内存。
-AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。
-  按顺序执行AOF中的所有命令 &#x21a9;&#xfe0e;
-   ">
+AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。">
 <meta itemprop="datePublished" content="2020-09-16T21:42:28+08:00" />
 <meta itemprop="dateModified" content="2020-09-16T21:42:28+08:00" />
-<meta itemprop="wordCount" content="34">
+<meta itemprop="wordCount" content="31">
 
 
 
-<meta itemprop="keywords" content="Open Source," />
+<meta itemprop="keywords" content="Redis,持久化,高可靠性," />
 <meta property="og:title" content="Redis持久化机制" />
 <meta property="og:description" content="Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。
 AOF AOF记录的是操作命令，也就是增删改命令，例如set key1 value1在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。
-当Redis实例重启后，将AOF日志 1就可以恢复数据。
+当Redis实例重启后，将AOF日志重放(按顺序执行AOF中的所有命令)就可以恢复数据。
 AOF的优缺点 因为AOF是以追加写文件的形式记录一条更新命令，所以速度快。缺点是：
  文件系统有文件大小的限制，不可能一直追加写下去。 重放过程需要按顺序执行所有命令，文件越大越耗时。 当AOF文件越来越大时，追加写的速度也会越来越慢。  因此Redis提供了AOF重写的功能，用来减小AOF的文件大小。
 AOF重写 AOF重写会将某一状态下的所有数据，以命令的形式记录到文件中。对于某一个已经有过100次更新操作的键值对而言，经过AOF重写之后就从一百条命令变成了一条命令，因此AOF重写后可以使得AOF文件减小。当执行bgrewriteaof命令时， Redis进程会fork出一个子进程用于AOF的重写。这是为了不阻塞父进程继续对外提供服务。在Redis进程fork子进程的过程中，还是会阻塞的，因为需要将页表拷贝至子进程，Redis实例越大，页表就越大，拷贝的时间越长。拷贝完成后，子进程开始重写AOF文件，在重写的这段时间里如果有更新操作，比如SET key1 value2，父进程会申请新的内存页，将数据拷贝至新的内存页后，执行SET key1 value2命令修改新内存页，最后更新页表。
 RDB RDB是Redis实例某一状态下的所有数据，将RDB读入内存，数据就完全恢复了。RDB相当于在某一时刻对Redis实例拍了一张照片，因此也被称为RDB快照。
 RDB的优缺点 相对于AOF，用RDB恢复数据更快。生成RDB文件比写AOF文件慢，AOF只需要追加写，但是RDB需要对Redis实例的所有数据持久化，尽管Redis提供了异步生成RDB文件的方法。执行bgsave命令，主进程fork子进程，由子进程生成RDB文件。主进程fork子进程，拷贝页表期间，主进程是无法对外服务的。在子进程生成RDB文件期间，主进程采用写时复制。这部分和AOF重写是一样的。在子进程生成RDB文件期间，如果业务上读写比中写多读少，那么会占用相当一部分内存。比如数据总共有4G，写占比80%，那么需要额外占用4*0.8=3.2G内存。
-AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。
-  按顺序执行AOF中的所有命令 &#x21a9;&#xfe0e;
-   " />
+AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://xuwangwei93.github.io/post/redis%E6%8C%81%E4%B9%85%E5%8C%96%E6%9C%BA%E5%88%B6/" />
 <meta property="article:published_time" content="2020-09-16T21:42:28+08:00" />
@@ -42,15 +38,13 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 <meta name="twitter:title" content="Redis持久化机制"/>
 <meta name="twitter:description" content="Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。
 AOF AOF记录的是操作命令，也就是增删改命令，例如set key1 value1在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。
-当Redis实例重启后，将AOF日志 1就可以恢复数据。
+当Redis实例重启后，将AOF日志重放(按顺序执行AOF中的所有命令)就可以恢复数据。
 AOF的优缺点 因为AOF是以追加写文件的形式记录一条更新命令，所以速度快。缺点是：
  文件系统有文件大小的限制，不可能一直追加写下去。 重放过程需要按顺序执行所有命令，文件越大越耗时。 当AOF文件越来越大时，追加写的速度也会越来越慢。  因此Redis提供了AOF重写的功能，用来减小AOF的文件大小。
 AOF重写 AOF重写会将某一状态下的所有数据，以命令的形式记录到文件中。对于某一个已经有过100次更新操作的键值对而言，经过AOF重写之后就从一百条命令变成了一条命令，因此AOF重写后可以使得AOF文件减小。当执行bgrewriteaof命令时， Redis进程会fork出一个子进程用于AOF的重写。这是为了不阻塞父进程继续对外提供服务。在Redis进程fork子进程的过程中，还是会阻塞的，因为需要将页表拷贝至子进程，Redis实例越大，页表就越大，拷贝的时间越长。拷贝完成后，子进程开始重写AOF文件，在重写的这段时间里如果有更新操作，比如SET key1 value2，父进程会申请新的内存页，将数据拷贝至新的内存页后，执行SET key1 value2命令修改新内存页，最后更新页表。
 RDB RDB是Redis实例某一状态下的所有数据，将RDB读入内存，数据就完全恢复了。RDB相当于在某一时刻对Redis实例拍了一张照片，因此也被称为RDB快照。
 RDB的优缺点 相对于AOF，用RDB恢复数据更快。生成RDB文件比写AOF文件慢，AOF只需要追加写，但是RDB需要对Redis实例的所有数据持久化，尽管Redis提供了异步生成RDB文件的方法。执行bgsave命令，主进程fork子进程，由子进程生成RDB文件。主进程fork子进程，拷贝页表期间，主进程是无法对外服务的。在子进程生成RDB文件期间，主进程采用写时复制。这部分和AOF重写是一样的。在子进程生成RDB文件期间，如果业务上读写比中写多读少，那么会占用相当一部分内存。比如数据总共有4G，写占比80%，那么需要额外占用4*0.8=3.2G内存。
-AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。
-  按顺序执行AOF中的所有命令 &#x21a9;&#xfe0e;
-   "/>
+AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。"/>
 <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" media="screen" href="https://xuwangwei93.github.io/css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="screen" href="https://xuwangwei93.github.io/css/main.css" />
@@ -96,9 +90,9 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 			<div class="markdown">
 				<p>Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。</p>
 <h2 id="aof">AOF</h2>
-<p>AOF记录的是操作命令，也就是增删改命令，例如<code>set key1 value1</code>在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。</p>
-<p>当Redis实例重启后，将AOF日志 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>就可以恢复数据。</p>
-<h6 id="aof的优缺点">AOF的优缺点</h6>
+<p>AOF记录的是操作命令，也就是增删改命令，例如<code>set key1 value1</code>在AOF中记录的就是<code>*3 $3 set $4 key1 $6 value1</code>。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。</p>
+<p>当Redis实例重启后，将AOF日志重放(按顺序执行AOF中的所有命令)就可以恢复数据。</p>
+<h3 id="aof的优缺点">AOF的优缺点</h3>
 <p>因为AOF是以追加写文件的形式记录一条更新命令，所以速度快。缺点是：</p>
 <ol>
 <li>文件系统有文件大小的限制，不可能一直追加写下去。</li>
@@ -110,18 +104,10 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 <p>AOF重写会将某一状态下的所有数据，以命令的形式记录到文件中。对于某一个已经有过100次更新操作的键值对而言，经过AOF重写之后就从一百条命令变成了一条命令，因此AOF重写后可以使得AOF文件减小。当执行<code>bgrewriteaof</code>命令时， Redis进程会fork出一个子进程用于AOF的重写。这是为了不阻塞父进程继续对外提供服务。在Redis进程fork子进程的过程中，还是会阻塞的，因为需要将页表拷贝至子进程，Redis实例越大，页表就越大，拷贝的时间越长。拷贝完成后，子进程开始重写AOF文件，在重写的这段时间里如果有更新操作，比如<code>SET key1 value2</code>，父进程会申请新的内存页，将数据拷贝至新的内存页后，执行<code>SET key1 value2</code>命令修改新内存页，最后更新页表。</p>
 <h2 id="rdb">RDB</h2>
 <p>RDB是Redis实例某一状态下的所有数据，将RDB读入内存，数据就完全恢复了。RDB相当于在某一时刻对Redis实例拍了一张照片，因此也被称为RDB快照。</p>
-<h6 id="rdb的优缺点">RDB的优缺点</h6>
+<h3 id="rdb的优缺点">RDB的优缺点</h3>
 <p>相对于AOF，用RDB恢复数据更快。生成RDB文件比写AOF文件慢，AOF只需要追加写，但是RDB需要对Redis实例的所有数据持久化，尽管Redis提供了异步生成RDB文件的方法。执行<code>bgsave</code>命令，主进程fork子进程，由子进程生成RDB文件。主进程fork子进程，拷贝页表期间，主进程是无法对外服务的。在子进程生成RDB文件期间，主进程采用写时复制。这部分和AOF重写是一样的。在子进程生成RDB文件期间，如果业务上读写比中写多读少，那么会占用相当一部分内存。比如数据总共有4G，写占比80%，那么需要额外占用4*0.8=3.2G内存。</p>
 <h2 id="aof和rdb的组合使用">AOF和RDB的组合使用</h2>
 <p>使用RDB恢复数据快，但是生成RDB文件慢，使用AOF追加写日志快，但是恢复数据慢。因此RDB文件作为全量备份，结合AOF作为增量备份，可以取长补短。</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>按顺序执行AOF中的所有命令 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
 
 			</div>
 
@@ -130,7 +116,11 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 					
 						<ul class="flat">
 							
-							<li><a href="/tags/open-source">Open Source</a></li>
+							<li><a href="/tags/redis">Redis</a></li>
+							
+							<li><a href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96">持久化</a></li>
+							
+							<li><a href="/tags/%E9%AB%98%E5%8F%AF%E9%9D%A0%E6%80%A7">高可靠性</a></li>
 							
 						</ul>
 					

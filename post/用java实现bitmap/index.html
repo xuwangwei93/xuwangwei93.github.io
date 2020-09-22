@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>用java实现Bitmap - </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta itemprop="name" content="用java实现Bitmap">
+<meta itemprop="description" content="我今天遇到的一个业务需求是这样的：给定一个范围比如1-1533，这是目标需要覆盖的范围，还有一些实际执行的范围，比如1-100、300-700、400-500、600-1600，然后判断实际有没有覆盖目标范围。我举的这个例子是没有覆盖的，101-299这个区间没有覆盖。我只能想到Redis里的Bitmap来解决这个问题，所以用java实现了Bitmap。
+import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwangwei * @since 2020-09-22 */ public class Bitmap { /** * 容量。例如，此值为100时表示第0位到第99位可用。 */ private int capacity; /** * 数组长度 */ private int length; /** * 数据 */ private long[] data; /** * 构造方法 * * @param capacity 容量。例如，此值为100时表示第0位到第99位可用。 */ public Bitmap(int capacity) { this.capacity = capacity; length = capacity &gt;&gt; 6; data = new long[length]; } /** * 将第{@code index}位设置为1或者0 * * @param index 下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int index, boolean value) { if (index &gt;= capacity || index &lt; 0) { return; } int arrIndex = index &gt;&gt; 6; int offset = index &amp; 63; if (value) { data[arrIndex] = data[arrIndex] | (0b1 &lt;&lt; offset); } else { data[arrIndex] = data[arrIndex] &amp; (~(0b1 &lt;&lt; offset)); } } /** * 将第{@code from}位至第{@code to}位设置为1或者0。含头含尾。 * * @param from 起始下标 * @param to 终止下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int from, int to, boolean value) { if (from &gt; to) { throw new IllegalArgumentException(&quot;起始下标不能大于终止下标&quot;); } for (int i = from; i &lt;= to; i&#43;&#43;) { setBit(i, value); } } @Override public boolean equals(Object o) { if (this == o) return true; if (o == null || getClass() !">
+<meta itemprop="datePublished" content="2020-09-22T22:20:18+08:00" />
+<meta itemprop="dateModified" content="2020-09-22T22:20:18+08:00" />
+<meta itemprop="wordCount" content="239">
+
+
+
+<meta itemprop="keywords" content="Bitmap,java," />
+<meta property="og:title" content="用java实现Bitmap" />
+<meta property="og:description" content="我今天遇到的一个业务需求是这样的：给定一个范围比如1-1533，这是目标需要覆盖的范围，还有一些实际执行的范围，比如1-100、300-700、400-500、600-1600，然后判断实际有没有覆盖目标范围。我举的这个例子是没有覆盖的，101-299这个区间没有覆盖。我只能想到Redis里的Bitmap来解决这个问题，所以用java实现了Bitmap。
+import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwangwei * @since 2020-09-22 */ public class Bitmap { /** * 容量。例如，此值为100时表示第0位到第99位可用。 */ private int capacity; /** * 数组长度 */ private int length; /** * 数据 */ private long[] data; /** * 构造方法 * * @param capacity 容量。例如，此值为100时表示第0位到第99位可用。 */ public Bitmap(int capacity) { this.capacity = capacity; length = capacity &gt;&gt; 6; data = new long[length]; } /** * 将第{@code index}位设置为1或者0 * * @param index 下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int index, boolean value) { if (index &gt;= capacity || index &lt; 0) { return; } int arrIndex = index &gt;&gt; 6; int offset = index &amp; 63; if (value) { data[arrIndex] = data[arrIndex] | (0b1 &lt;&lt; offset); } else { data[arrIndex] = data[arrIndex] &amp; (~(0b1 &lt;&lt; offset)); } } /** * 将第{@code from}位至第{@code to}位设置为1或者0。含头含尾。 * * @param from 起始下标 * @param to 终止下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int from, int to, boolean value) { if (from &gt; to) { throw new IllegalArgumentException(&quot;起始下标不能大于终止下标&quot;); } for (int i = from; i &lt;= to; i&#43;&#43;) { setBit(i, value); } } @Override public boolean equals(Object o) { if (this == o) return true; if (o == null || getClass() !" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://xuwangwei93.github.io/post/%E7%94%A8java%E5%AE%9E%E7%8E%B0bitmap/" />
+<meta property="article:published_time" content="2020-09-22T22:20:18+08:00" />
+<meta property="article:modified_time" content="2020-09-22T22:20:18+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="用java实现Bitmap"/>
+<meta name="twitter:description" content="我今天遇到的一个业务需求是这样的：给定一个范围比如1-1533，这是目标需要覆盖的范围，还有一些实际执行的范围，比如1-100、300-700、400-500、600-1600，然后判断实际有没有覆盖目标范围。我举的这个例子是没有覆盖的，101-299这个区间没有覆盖。我只能想到Redis里的Bitmap来解决这个问题，所以用java实现了Bitmap。
+import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwangwei * @since 2020-09-22 */ public class Bitmap { /** * 容量。例如，此值为100时表示第0位到第99位可用。 */ private int capacity; /** * 数组长度 */ private int length; /** * 数据 */ private long[] data; /** * 构造方法 * * @param capacity 容量。例如，此值为100时表示第0位到第99位可用。 */ public Bitmap(int capacity) { this.capacity = capacity; length = capacity &gt;&gt; 6; data = new long[length]; } /** * 将第{@code index}位设置为1或者0 * * @param index 下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int index, boolean value) { if (index &gt;= capacity || index &lt; 0) { return; } int arrIndex = index &gt;&gt; 6; int offset = index &amp; 63; if (value) { data[arrIndex] = data[arrIndex] | (0b1 &lt;&lt; offset); } else { data[arrIndex] = data[arrIndex] &amp; (~(0b1 &lt;&lt; offset)); } } /** * 将第{@code from}位至第{@code to}位设置为1或者0。含头含尾。 * * @param from 起始下标 * @param to 终止下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int from, int to, boolean value) { if (from &gt; to) { throw new IllegalArgumentException(&quot;起始下标不能大于终止下标&quot;); } for (int i = from; i &lt;= to; i&#43;&#43;) { setBit(i, value); } } @Override public boolean equals(Object o) { if (this == o) return true; if (o == null || getClass() !"/>
+<link href='https://fonts.googleapis.com/css?family=Playfair+Display:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" media="screen" href="https://xuwangwei93.github.io/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="screen" href="https://xuwangwei93.github.io/css/main.css" />
+
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="https://xuwangwei93.github.io/css/dark.css" />
+
+	
+		<script src="https://xuwangwei93.github.io/js/main.js"></script>
+</head>
+
+<body>
+	<div class="container wrapper">
+		<div class="header">
+	
+	<h1 class="site-title"><a href="https://xuwangwei93.github.io/"></a></h1>
+	<div class="site-description"><nav class="nav social">
+			<ul class="flat"></ul>
+		</nav></div>
+
+	<nav class="nav">
+		<ul class="flat">
+			
+		</ul>
+	</nav>
+</div>
+
+
+		<div class="post">
+			<div class="post-header">
+				
+					<div class="meta">
+						<div class="date">
+							<span class="day">22</span>
+							<span class="rest">Sep 2020</span>
+						</div>
+					</div>
+				
+				<div class="matter">
+					<h1 class="title">用java实现Bitmap</h1>
+				</div>
+			</div>
+					
+			<div class="markdown">
+				<p>我今天遇到的一个业务需求是这样的：给定一个范围比如1-1533，这是目标需要覆盖的范围，还有一些实际执行的范围，比如1-100、300-700、400-500、600-1600，然后判断实际有没有覆盖目标范围。我举的这个例子是没有覆盖的，101-299这个区间没有覆盖。我只能想到Redis里的Bitmap来解决这个问题，所以用java实现了Bitmap。</p>
+<pre><code>import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * Bitmap
+ *
+ * @author xuwangwei
+ * @since 2020-09-22
+ */
+public class Bitmap {
+    /**
+     * 容量。例如，此值为100时表示第0位到第99位可用。
+     */
+    private int capacity;
+
+    /**
+     * 数组长度
+     */
+    private int length;
+
+    /**
+     * 数据
+     */
+    private long[] data;
+
+    /**
+     * 构造方法
+     *
+     * @param capacity 容量。例如，此值为100时表示第0位到第99位可用。
+     */
+    public Bitmap(int capacity) {
+        this.capacity = capacity;
+        length = capacity &gt;&gt; 6;
+        data = new long[length];
+    }
+
+    /**
+     * 将第{@code index}位设置为1或者0
+     *
+     * @param index 下标
+     * @param value 布尔值。true会置为1，false会置为0。
+     */
+    public void setBit(int index, boolean value) {
+        if (index &gt;= capacity || index &lt; 0) {
+            return;
+        }
+        int arrIndex = index &gt;&gt; 6;
+        int offset = index &amp; 63;
+        if (value) {
+            data[arrIndex] = data[arrIndex] | (0b1 &lt;&lt; offset);
+        } else {
+            data[arrIndex] = data[arrIndex] &amp; (~(0b1 &lt;&lt; offset));
+        }
+    }
+
+    /**
+     * 将第{@code from}位至第{@code to}位设置为1或者0。含头含尾。
+     *
+     * @param from  起始下标
+     * @param to    终止下标
+     * @param value 布尔值。true会置为1，false会置为0。
+     */
+    public void setBit(int from, int to, boolean value) {
+        if (from &gt; to) {
+            throw new IllegalArgumentException(&quot;起始下标不能大于终止下标&quot;);
+        }
+        for (int i = from; i &lt;= to; i++) {
+            setBit(i, value);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bitmap bitmap = (Bitmap) o;
+        return capacity == bitmap.capacity &amp;&amp;
+                Arrays.equals(data, bitmap.data);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(capacity);
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
+    }
+}
+
+</code></pre>
+			</div>
+
+			<div class="tags">
+				
+					
+						<ul class="flat">
+							
+							<li><a href="/tags/bitmap">Bitmap</a></li>
+							
+							<li><a href="/tags/java">java</a></li>
+							
+						</ul>
+					
+				
+			</div></div>
+	</div>
+	<div class="footer wrapper">
+	<nav class="nav">
+		<div>2020  <a href="https://github.com/knadh/hugo-ink">Ink</a> theme on <a href="https://gohugo.io">Hugo</a></div>
+	</nav>
+</div>
+
+
+</body>
+</html>
