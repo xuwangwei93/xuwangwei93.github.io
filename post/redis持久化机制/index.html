@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Redis持久化机制 - </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Redis持久化机制 - 许王伟的个人博客</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta itemprop="name" content="Redis持久化机制">
 <meta itemprop="description" content="Redis提供了两种持久化方式，一种叫AOF，另一种叫RDB。这两种方式都需要用户显式开启才会生效，用户可以选择不开启、只开启其中一个或者两个都开。
 AOF AOF记录的是操作命令，也就是增删改命令，例如set key1 value1在AOF中记录的就是*3 $3 set $4 key1 $6 value1。Redis写AOF的时机是在每次执行完客户端提交的命令后，因此AOF也被称为AOF日志，它记录的就是更新操作日志。
@@ -51,6 +51,7 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 
         <link id="dark-scheme" rel="stylesheet" type="text/css" href="https://xuwangwei93.github.io/css/dark.css" />
 
+	<script src="https://xuwangwei93.github.io/js/feather.min.js"></script>
 	
 		<script src="https://xuwangwei93.github.io/js/main.js"></script>
 </head>
@@ -59,10 +60,16 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 	<div class="container wrapper">
 		<div class="header">
 	
-	<h1 class="site-title"><a href="https://xuwangwei93.github.io/"></a></h1>
-	<div class="site-description"><nav class="nav social">
-			<ul class="flat"></ul>
-		</nav></div>
+		<div class="avatar">
+			<a href="https://xuwangwei93.github.io/">
+				<img src="https://image.freepik.com/free-vector/young-man-head-with-beard-avatar-character_24877-36786.jpg" alt="许王伟的个人博客" />
+			</a>
+		</div>
+	
+	<h1 class="site-title"><a href="https://xuwangwei93.github.io/">许王伟的个人博客</a></h1>
+	<div class="site-description"><p>享受编程，享受思考，享受生活</p><nav class="nav social">
+			<ul class="flat"><li><a href="18846036593" title="Phone"><i data-feather="phone"></i></a></li><li><a href="soldierxww@163.com" title="Mail"><i data-feather="mail"></i></a></li></ul>
+		</nav><span class="scheme-toggle"><a href="#" id="scheme-toggle"></a></div>
 
 	<nav class="nav">
 		<ul class="flat">
@@ -133,6 +140,6 @@ AOF和RDB的组合使用 使用RDB恢复数据快，但是生成RDB文件慢，�
 	</nav>
 </div>
 
-
+<script>feather.replace()</script>
 </body>
 </html>

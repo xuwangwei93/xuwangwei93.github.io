@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>用java实现Bitmap - </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>用java实现Bitmap - 许王伟的个人博客</title><meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta itemprop="name" content="用java实现Bitmap">
 <meta itemprop="description" content="我今天遇到的一个业务需求是这样的：给定一个范围比如1-1533，这是目标需要覆盖的范围，还有一些实际执行的范围，比如1-100、300-700、400-500、600-1600，然后判断实际有没有覆盖目标范围。我举的这个例子是没有覆盖的，101-299这个区间没有覆盖。我只能想到Redis里的Bitmap来解决这个问题，所以用java实现了Bitmap。
 import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwangwei * @since 2020-09-22 */ public class Bitmap { /** * 容量。例如，此值为100时表示第0位到第99位可用。 */ private int capacity; /** * 数组长度 */ private int length; /** * 数据 */ private long[] data; /** * 构造方法 * * @param capacity 容量。例如，此值为100时表示第0位到第99位可用。 */ public Bitmap(int capacity) { this.capacity = capacity; length = capacity &gt;&gt; 6; data = new long[length]; } /** * 将第{@code index}位设置为1或者0 * * @param index 下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int index, boolean value) { if (index &gt;= capacity || index &lt; 0) { return; } int arrIndex = index &gt;&gt; 6; int offset = index &amp; 63; if (value) { data[arrIndex] = data[arrIndex] | (0b1 &lt;&lt; offset); } else { data[arrIndex] = data[arrIndex] &amp; (~(0b1 &lt;&lt; offset)); } } /** * 将第{@code from}位至第{@code to}位设置为1或者0。含头含尾。 * * @param from 起始下标 * @param to 终止下标 * @param value 布尔值。true会置为1，false会置为0。 */ public void setBit(int from, int to, boolean value) { if (from &gt; to) { throw new IllegalArgumentException(&quot;起始下标不能大于终止下标&quot;); } for (int i = from; i &lt;= to &amp;&amp; i &lt; capacity; i&#43;&#43;) { setBit(i, value); } } @Override public boolean equals(Object o) { if (this == o) return true; if (o == null || getClass() !">
@@ -30,6 +30,7 @@ import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwa
 
         <link id="dark-scheme" rel="stylesheet" type="text/css" href="https://xuwangwei93.github.io/css/dark.css" />
 
+	<script src="https://xuwangwei93.github.io/js/feather.min.js"></script>
 	
 		<script src="https://xuwangwei93.github.io/js/main.js"></script>
 </head>
@@ -38,10 +39,16 @@ import java.util.Arrays; import java.util.Objects; /** * Bitmap * * @author xuwa
 	<div class="container wrapper">
 		<div class="header">
 	
-	<h1 class="site-title"><a href="https://xuwangwei93.github.io/"></a></h1>
-	<div class="site-description"><nav class="nav social">
-			<ul class="flat"></ul>
-		</nav></div>
+		<div class="avatar">
+			<a href="https://xuwangwei93.github.io/">
+				<img src="https://image.freepik.com/free-vector/young-man-head-with-beard-avatar-character_24877-36786.jpg" alt="许王伟的个人博客" />
+			</a>
+		</div>
+	
+	<h1 class="site-title"><a href="https://xuwangwei93.github.io/">许王伟的个人博客</a></h1>
+	<div class="site-description"><p>享受编程，享受思考，享受生活</p><nav class="nav social">
+			<ul class="flat"><li><a href="18846036593" title="Phone"><i data-feather="phone"></i></a></li><li><a href="soldierxww@163.com" title="Mail"><i data-feather="mail"></i></a></li></ul>
+		</nav><span class="scheme-toggle"><a href="#" id="scheme-toggle"></a></div>
 
 	<nav class="nav">
 		<ul class="flat">
@@ -179,6 +186,6 @@ public class Bitmap {
 	</nav>
 </div>
 
-
+<script>feather.replace()</script>
 </body>
 </html>
