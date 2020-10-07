@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>管程 on 许王伟的个人博客</title>
+    <link>https://xuwangwei93.github.io/tags/%E7%AE%A1%E7%A8%8B/</link>
+    <description>Recent content in 管程 on 许王伟的个人博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 07 Oct 2020 11:52:44 +0800</lastBuildDate><atom:link href="https://xuwangwei93.github.io/tags/%E7%AE%A1%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>用管程实现线程安全的阻塞队列</title>
+      <link>https://xuwangwei93.github.io/post/%E7%94%A8%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</link>
+      <pubDate>Wed, 07 Oct 2020 11:52:44 +0800</pubDate>
+      
+      <guid>https://xuwangwei93.github.io/post/%E7%94%A8%E7%AE%A1%E7%A8%8B%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/</guid>
+      <description>import java.util.concurrent.locks.Condition; import java.util.concurrent.locks.Lock; import java.util.concurrent.locks.ReentrantLock; /** * 基于数组实现的阻塞队列 * * @author xuwangwei * @since 2020-10-07 */ public class ArrayBlockingQueue&amp;lt;E&amp;gt; { /** 公平锁 */ private final Lock lock = new ReentrantLock(true); /** 条件变量：队列不满 */ private final Condition notFull = lock.newCondition(); /** 条件变量：队列不空 */ private final Condition notEmpty = lock.newCondition(); /** 队列长度 */ private final int length; /** 队列元素 */ private final Object[] data; /** 队列元素个数 */ private int size; /** 头指针 */ private int head; /** 尾指针 */ private int tail; public ArrayBlockingQueue(int length) { data = new Object[length]; this.</description>
+    </item>
+    
+  </channel>
+</rss>
